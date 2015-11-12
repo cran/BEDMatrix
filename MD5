@@ -1,12 +1,13 @@
-38a8121456973aa1f92ed805abcd9150 *DESCRIPTION
+1f6f369a0a101dbf414d835bd5b639db *DESCRIPTION
 c86a14c165f898641bf1b9c92925c731 *LICENSE
 a5aea5b887775479c6a5684f370c178c *NAMESPACE
+92ca8e9d0020aaad88716800e3116508 *NEWS.md
 51f73f655a933bb81db4663a4184c550 *R/BEDMatrix.R
 8c59e8f2f44f83a9e2fb0ffbde7c54e9 *R/package.R
-857215c2f23dd266af8555d84e9e747b *README.md
+01f8694332e14fb5cd67ab16ea9b21d1 *README.md
 cce70ce7a0ad2b3d6a7bed649cb185e0 *cleanup
-12bac2784785f9d1c42d551c3e14c49e *configure
-9d64a599e1803f23df31be7388659212 *configure.ac
+4570a8d2e0a454ebb7ef1a475c5916c5 *configure
+253528dacf1be74d31c9e360739f0525 *configure.ac
 70f5cac7eff37715a4411b0a5f4b4524 *inst/extdata/example.bed
 bd1307c075cbb58c80e90ab806c88bd9 *inst/extdata/example.bim
 c017396bc04509b243c106ecadf37fdb *inst/extdata/example.fam
@@ -24,4 +25,4 @@ b4a338c2be6a947303399969edc07ba1 *tools/README.md
 b4b24b88055910a6b4dbb0f436af648e *tools/config.sub
 361482dd6b5b5eb7090fff3986fba68a *tools/install-sh
 e96b23cac2ebf3e69c3b5259a12e3367 *tools/m4/ax_boost_base.m4
-43634524b2540d7da3da87d8bb5e56cf *tools/m4/ax_boost_iostreams.m4
+6d282f076d1bfc9f0ae140cff9a2f7e9 *tools/m4/ax_boost_iostreams.m4
