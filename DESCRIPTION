@@ -1,5 +1,5 @@
 Package: BEDMatrix
-Version: 1.1.0
+Version: 1.2.0
 License: MIT + file LICENSE
 Title: Matrices Backed by Binary PED Files (PLINK)
 Description: A matrix-like data structure that allows for efficient,
@@ -18,12 +18,12 @@ Depends: R (>= 3.0.0)
 Imports: methods, Rcpp (>= 0.12.1)
 LinkingTo: Rcpp, BH
 Suggests: testthat
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2015-11-30 18:43:29 UTC; agrueneberg
+Packaged: 2016-03-04 21:55:40 UTC; agrueneberg
 Author: Alexander Grueneberg [aut, cre],
   Lian Lian [ctb],
   Gustavo de los Campos [ctb]
 Maintainer: Alexander Grueneberg <alexander.grueneberg@googlemail.com>
 Repository: CRAN
-Date/Publication: 2015-11-30 21:23:01
+Date/Publication: 2016-03-05 00:15:42

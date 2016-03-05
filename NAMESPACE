@@ -2,8 +2,11 @@
 
 S3method("[",BEDMatrix)
 S3method("dimnames<-",BEDMatrix)
+S3method(as.matrix,BEDMatrix)
 S3method(dim,BEDMatrix)
 S3method(dimnames,BEDMatrix)
+S3method(is.matrix,BEDMatrix)
+S3method(length,BEDMatrix)
 S3method(print,BEDMatrix)
 export(BEDMatrix)
 import(Rcpp)
