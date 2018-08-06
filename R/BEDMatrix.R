@@ -10,14 +10,15 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
             stop("File not found.")
         }
     }
-    dir <- substr(path, 1L, nchar(path) - 4L)
+    pathSansExt <- tools::file_path_sans_ext(path)
+    filesetName <- basename(pathSansExt)
     if (is.null(n)) {
         # Check if FAM file exists
-        famPath <- paste0(dir, ".fam")
+        famPath <- paste0(pathSansExt, ".fam")
         if (!file.exists(famPath)) {
-            stop("FAM file of same name not found. Provide number of samples (n).")
+            stop(filesetName, ".fam not found. Provide number of samples (n).")
         } else {
-            message("Extracting number of samples and rownames from FAM file...")
+            message("Extracting number of samples and rownames from ", filesetName, ".fam...")
             if (requireNamespace("data.table", quietly = TRUE)) {
                 fam <- data.table::fread(famPath, select = c(1L, 2L), data.table = FALSE, showProgress = FALSE)
                 # Determine n
@@ -41,11 +42,11 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
     }
     if (is.null(p)) {
         # Check if BIM file exists
-        bimPath <- paste0(dir, ".bim")
+        bimPath <- paste0(pathSansExt, ".bim")
         if (!file.exists(bimPath)) {
-            stop("BIM file of same name not found. Provide number of variants (p).")
+            stop(filesetName, ".bim not found. Provide number of variants (p).")
         } else {
-            message("Extracting number of variants and colnames from BIM file...")
+            message("Extracting number of variants and colnames from ", filesetName, ".bim...")
             if (requireNamespace("data.table", quietly = TRUE)) {
                 bim <- data.table::fread(bimPath, select = c(2L, 5L), data.table = FALSE, showProgress = FALSE)
                 # Determine p
@@ -68,7 +69,7 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
         colnames <- NULL
     }
     # Create Rcpp object
-    .Object@xptr <- .Call("BEDMatrix__new", path, n, p)
+    .Object@xptr <- .Call(C_new, path, n, p)
     .Object@path <- path
     .Object@dims <- c(n, p)
     .Object@dnames <- list(rownames, colnames)
@@ -76,11 +77,11 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
 }
 
 extract_vector <- function(x, i) {
-    .Call("BEDMatrix__extract_vector", x@xptr, i)
+    .Call(C_extract_vector, x@xptr, i)
 }
 
 extract_matrix <- function(x, i, j) {
-    subset <- .Call("BEDMatrix__extract_matrix", x@xptr, i, j)
+    subset <- .Call(C_extract_matrix, x@xptr, i, j)
     # Preserve dimnames
     names <- x@dnames
     dimnames(subset) <- list(
@@ -99,11 +100,11 @@ show <- function(object) {
 
 #' A Class to Extract Genotypes from a PLINK .bed File.
 #'
-#' `BEDMatrix` is a class that maps a [PLINK .bed](https://www.cog-genomics.org/plink2/formats#bed)
-#' file into memory and behaves similarly to a regular `matrix` by implementing
-#' key methods such as `[`, `dim`, and `dimnames`. Subsets are extracted
-#' directly and on-demand from the .bed file without loading the entire file
-#' into memory.
+#' `BEDMatrix` is a class that maps a [PLINK
+#' .bed](https://www.cog-genomics.org/plink2/formats#bed) file into memory and
+#' behaves similarly to a regular `matrix` by implementing key methods such as
+#' `[`, `dim`, and `dimnames`. Subsets are extracted directly and on-demand
+#' from the .bed file without loading the entire file into memory.
 #'
 #' The subsets extracted from a `BEDMatrix` object are coded similarly to
 #' [.raw](https://www.cog-genomics.org/plink2/formats#raw) files (generated

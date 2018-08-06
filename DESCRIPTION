@@ -1,5 +1,5 @@
 Package: BEDMatrix
-Version: 1.4.0
+Version: 1.4.1
 License: MIT + file LICENSE
 Title: Extract Genotypes from a PLINK .bed File
 Description: A matrix-like data structure that allows for efficient,
@@ -17,13 +17,14 @@ SystemRequirements: C++11
 Depends: R (>= 3.0.0)
 Imports: methods, Rcpp (>= 0.12.1), crochet
 LinkingTo: Rcpp, BH
-Suggests: data.table, testthat
-RoxygenNote: 6.0.1
+Suggests: data.table, testthat, covr
+RoxygenNote: 6.1.0
+Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2017-05-07 13:12:26 UTC; agrueneberg
+Packaged: 2018-08-06 15:50:57 UTC; agrueneberg
 Author: Alexander Grueneberg [aut, cre],
   Lian Lian [ctb],
   Gustavo de los Campos [ctb]
 Maintainer: Alexander Grueneberg <alexander.grueneberg@googlemail.com>
 Repository: CRAN
-Date/Publication: 2017-05-07 13:33:10 UTC
+Date/Publication: 2018-08-06 16:10:03 UTC
