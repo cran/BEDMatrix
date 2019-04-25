@@ -1,7 +1,7 @@
-# Delimiters used in PED files
+# Delimiters used in .fam and .bim files
 delims <- "[ \t]"
 
-initialize <- function(.Object, path, n = NULL, p = NULL) {
+initialize <- function(.Object, path, n = NULL, p = NULL, simple_names = FALSE) {
     path <- path.expand(path)
     if (!file.exists(path)) {
         # Try to add extension (common in PLINK)
@@ -20,20 +20,38 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
         } else {
             message("Extracting number of samples and rownames from ", filesetName, ".fam...")
             if (requireNamespace("data.table", quietly = TRUE)) {
-                fam <- data.table::fread(famPath, select = c(1L, 2L), data.table = FALSE, showProgress = FALSE)
+                if (simple_names) {
+                    famColumns <- c(2L)
+                } else {
+                    famColumns <- c(1L, 2L)
+                }
+                fam <- data.table::fread(famPath, select = famColumns, data.table = FALSE, showProgress = FALSE)
                 # Determine n
                 n <- nrow(fam)
                 # Determine rownames
-                rownames <- paste0(fam[, 1L], "_", fam[, 2L])
+                if (simple_names) {
+                    # Use within-family ID only
+                    rownames <- fam[, 1L]
+                } else {
+                    # Concatenate family ID and within-family ID
+                    rownames <- paste0(fam[, 1L], "_", fam[, 2L])
+                }
             } else {
-                fam <- readLines(famPath)
+                fam <- readLines(famPath) # much faster than read.table
                 # Determine n
                 n <- length(fam)
                 # Determine rownames
-                rownames <- sapply(strsplit(fam, delims), function(line) {
-                    # Concatenate family ID and subject ID
-                    return(paste0(line[1L], "_", line[2L]))
-                })
+                if (simple_names) {
+                    rownames <- sapply(strsplit(fam, delims), function(line) {
+                        # Use within-family ID only
+                        line[2L]
+                    })
+                } else {
+                    rownames <- sapply(strsplit(fam, delims), function(line) {
+                        # Concatenate family ID and within-family ID
+                        paste0(line[1L], "_", line[2L])
+                    })
+                }
             }
         }
     } else {
@@ -48,20 +66,38 @@ initialize <- function(.Object, path, n = NULL, p = NULL) {
         } else {
             message("Extracting number of variants and colnames from ", filesetName, ".bim...")
             if (requireNamespace("data.table", quietly = TRUE)) {
-                bim <- data.table::fread(bimPath, select = c(2L, 5L), data.table = FALSE, showProgress = FALSE)
+                if (simple_names) {
+                    bimColumns <- c(2L)
+                } else {
+                    bimColumns <- c(2L, 5L)
+                }
+                bim <- data.table::fread(bimPath, select = bimColumns, data.table = FALSE, showProgress = FALSE)
                 # Determine p
                 p <- nrow(bim)
                 # Determine colnames
-                colnames <- paste0(bim[, 1L], "_", bim[, 2L])
+                if (simple_names) {
+                    # Use variant name only
+                    colnames <- bim[, 1L]
+                } else {
+                    # Concatenate variant name and minor allele (like --recodeA)
+                    colnames <- paste0(bim[, 1L], "_", bim[, 2L])
+                }
             } else {
-                bim <- readLines(bimPath)
+                bim <- readLines(bimPath) # much faster than read.table
                 # Determine p
                 p <- length(bim)
                 # Determine colnames
-                colnames <- sapply(strsplit(bim, delims), function(line) {
-                    # Concatenate SNP name and minor allele (like --recodeA)
-                    return(paste0(line[2L], "_", line[5L]))
-                })
+                if (simple_names) {
+                    colnames <- sapply(strsplit(bim, delims), function(line) {
+                        # Use variant name only
+                        line[2L]
+                    })
+                } else {
+                    colnames <- sapply(strsplit(bim, delims), function(line) {
+                        # Concatenate variant name and minor allele (like --recodeA)
+                        paste0(line[2L], "_", line[5L])
+                    })
+                }
             }
         }
     } else {
@@ -196,6 +232,11 @@ BEDMatrix <- setClass("BEDMatrix", slots = c(xptr = "externalptr", dims = "integ
 #' name as the [.bed](https://www.cog-genomics.org/plink2/formats#bed) file).
 #' If a positive integer, the .bim file is not read and `colnames` will be set
 #' to `NULL` and have to be provided manually.
+#' @param simple_names Whether to simplify the format of the dimension names.
+#' If `FALSE` (the default), row names are concatenations of family IDs, `_`,
+#' and within-family IDs, while column names are concatenations of variant
+#' names, `_`, and minor alleles. If `TRUE`, row names are within-family IDs
+#' only and column names are variant names only.
 #' @return A [BEDMatrix-class] object.
 #' @example man/examples/initialize.R
 #' @seealso [BEDMatrix-package] to learn more about .bed files.
@@ -211,7 +252,7 @@ setMethod("initialize", signature(.Object = "BEDMatrix"), initialize)
 setMethod("show", signature(object = "BEDMatrix"), show)
 
 #' @export
-`[.BEDMatrix` <- crochet::extract(extract_vector = extract_vector, extract_matrix = extract_matrix)
+`[.BEDMatrix` <- crochet::extract(extract_vector = extract_vector, extract_matrix = extract_matrix, allowDoubles = TRUE)
 
 #' @export
 dim.BEDMatrix <- function(x) {
