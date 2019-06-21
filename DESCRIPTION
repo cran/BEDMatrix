@@ -1,5 +1,5 @@
 Package: BEDMatrix
-Version: 1.5.0
+Version: 1.6.1
 License: MIT + file LICENSE
 Title: Extract Genotypes from a PLINK .bed File
 Description: A matrix-like data structure that allows for efficient,
@@ -9,22 +9,17 @@ Description: A matrix-like data structure that allows for efficient,
     memory.
 Authors@R: c(
     person("Alexander", "Grueneberg", email = "alexander.grueneberg@googlemail.com", role = c("aut", "cre")),
-    person("Lian", "Lian", email = "lianl0501@gmail.com", role = c("ctb")),
     person("Gustavo", "de los Campos", email = "gustavoc@msu.edu", role = c("ctb")))
 URL: https://github.com/QuantGen/BEDMatrix
 BugReports: https://github.com/QuantGen/BEDMatrix/issues
-SystemRequirements: C++11
 Depends: R (>= 3.0.0)
-Imports: methods, Rcpp (>= 0.12.1), crochet (>= 2.0.0)
+Imports: methods, Rcpp (>= 0.12.1), crochet (>= 2.2.0)
 LinkingTo: Rcpp, BH
-Suggests: data.table, testthat, covr
-RoxygenNote: 6.1.1
-Encoding: UTF-8
+Suggests: data.table, LinkedMatrix, testthat
 NeedsCompilation: yes
-Packaged: 2019-04-25 14:30:07 UTC; agrueneberg
+Packaged: 2019-06-21 14:01:40 UTC; agrueneberg
 Author: Alexander Grueneberg [aut, cre],
-  Lian Lian [ctb],
   Gustavo de los Campos [ctb]
 Maintainer: Alexander Grueneberg <alexander.grueneberg@googlemail.com>
 Repository: CRAN
-Date/Publication: 2019-04-25 15:00:03 UTC
+Date/Publication: 2019-06-21 15:40:02 UTC
