@@ -1,16 +1,11 @@
-#include <R.h>
-#include <Rinternals.h>
-#include <stdlib.h> // for NULL
+#include "BEDMatrix.h"
+
 #include <R_ext/Rdynload.h>
 
-extern SEXP C_extract_matrix(SEXP, SEXP, SEXP);
-extern SEXP C_extract_vector(SEXP, SEXP);
-extern SEXP C_new(SEXP, SEXP, SEXP);
-
 static const R_CallMethodDef callEntries[] = {
-    {"C_extract_matrix", (DL_FUNC) &C_extract_matrix, 3},
-    {"C_extract_vector", (DL_FUNC) &C_extract_vector, 2},
-    {"C_new", (DL_FUNC) &C_new, 3},
+    {"BEDMatrix_initialize", (DL_FUNC) &BEDMatrix_initialize, 3},
+    {"BEDMatrix_extract_vector", (DL_FUNC) &BEDMatrix_extract_vector, 2},
+    {"BEDMatrix_extract_matrix", (DL_FUNC) &BEDMatrix_extract_matrix, 3},
     {NULL, NULL, 0}
 };
 

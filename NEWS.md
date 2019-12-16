@@ -1,3 +1,21 @@
+# BEDMatrix 2.0.1
+
+- Fix extra `;` outside of `compute_num_bytes_per_variant` function in exported
+  `BEDMatrix.h` header (found by CRAN incoming checks).
+
+
+# BEDMatrix 2.0.0
+
+- Extractions can be canceled with `Control-c`.
+- Reimplement package in C, drop Rcpp.
+- Genotypes can be extracted on the C level in other packages by adding
+  `BEDMatrix` to the `LinkingTo` field of the `DESCRIPTION` file and including
+  the `BEDMatrix.h` in your C code. The header file contains the `BEDMatrix`
+  struct and the following functions: `compute_num_bytes_per_variant()`,
+  `extract_genotype_linear()`, `extract_genotype_cartesian()`, and
+  `recode_genotype()`.
+
+
 # BEDMatrix 1.6.1
 
 - Re-add C++11 requirement to avoid warnings from Boost headers on Windows.
