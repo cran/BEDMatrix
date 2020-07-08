@@ -1,3 +1,9 @@
+# BEDMatrix 2.0.3
+
+- Replace testthat with tinytest.
+- Do not mix up minor/major and first/second alleles in documentation.
+
+
 # BEDMatrix 2.0.2
 
 - Fix that BED files larger than 2GB cannot be loaded in Windows.

@@ -14,16 +14,16 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
         # Try to add extension (common in PLINK)
         path <- paste0(path, ".bed")
         if (!file.exists(path)) {
-            stop("File not found.")
+            stop("File not found.", call. = FALSE)
         }
     }
     pathSansExt <- tools::file_path_sans_ext(path)
     filesetName <- basename(pathSansExt)
     if (is.null(n)) {
-        # Check if FAM file exists
+        # Check if .fam file exists
         famPath <- paste0(pathSansExt, ".fam")
         if (!file.exists(famPath)) {
-            stop(filesetName, ".fam not found. Provide number of samples (n).")
+            stop(filesetName, ".fam not found. Provide number of samples (n).", call. = FALSE)
         } else {
             message("Extracting number of samples and rownames from ", filesetName, ".fam...")
             if (requireNamespace("data.table", quietly = TRUE)) {
@@ -32,7 +32,13 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
                 } else {
                     famColumns <- c(1L, 2L)
                 }
-                fam <- data.table::fread(famPath, select = famColumns, colClasses = list(character = famColumns), data.table = FALSE, showProgress = FALSE)
+                fam <- data.table::fread(
+                    famPath,
+                    select = famColumns,
+                    colClasses = list(character = famColumns),
+                    data.table = FALSE,
+                    showProgress = FALSE
+                )
                 # Determine n
                 n <- nrow(fam)
                 # Determine rownames
@@ -49,15 +55,13 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
                 n <- length(fam)
                 # Determine rownames
                 if (simple_names) {
-                    rownames <- sapply(strsplit(fam, delims), function(line) {
-                        # Use within-family ID only
-                        line[2L]
-                    })
+                    # Use within-family ID only
+                    rownames <- vapply(strsplit(fam, delims), `[`, "", 2L)
                 } else {
-                    rownames <- sapply(strsplit(fam, delims), function(line) {
+                    rownames <- vapply(strsplit(fam, delims), function(line) {
                         # Concatenate family ID and within-family ID
                         paste0(line[1L], "_", line[2L])
-                    })
+                    }, "")
                 }
             }
         }
@@ -66,10 +70,10 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
         rownames <- NULL
     }
     if (is.null(p)) {
-        # Check if BIM file exists
+        # Check if .bim file exists
         bimPath <- paste0(pathSansExt, ".bim")
         if (!file.exists(bimPath)) {
-            stop(filesetName, ".bim not found. Provide number of variants (p).")
+            stop(filesetName, ".bim not found. Provide number of variants (p).", .call = FALSE)
         } else {
             message("Extracting number of variants and colnames from ", filesetName, ".bim...")
             if (requireNamespace("data.table", quietly = TRUE)) {
@@ -78,7 +82,13 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
                 } else {
                     bimColumns <- c(2L, 5L)
                 }
-                bim <- data.table::fread(bimPath, select = bimColumns, colClasses = list(character = bimColumns), data.table = FALSE, showProgress = FALSE)
+                bim <- data.table::fread(
+                    bimPath,
+                    select = bimColumns,
+                    colClasses = list(character = bimColumns),
+                    data.table = FALSE,
+                    showProgress = FALSE
+                )
                 # Determine p
                 p <- nrow(bim)
                 # Determine colnames
@@ -86,7 +96,8 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
                     # Use variant name only
                     colnames <- bim[, 1L]
                 } else {
-                    # Concatenate variant name and minor allele (like --recodeA)
+                    # Concatenate variant name and A1 allele (like '--recode A'
+                    # in PLINK)
                     colnames <- paste0(bim[, 1L], "_", bim[, 2L])
                 }
             } else {
@@ -95,15 +106,14 @@ BEDMatrix <- function(path, n = NULL, p = NULL, simple_names = FALSE) {
                 p <- length(bim)
                 # Determine colnames
                 if (simple_names) {
-                    colnames <- sapply(strsplit(bim, delims), function(line) {
-                        # Use variant name only
-                        line[2L]
-                    })
+                    # Use variant name only
+                    colnames <- vapply(strsplit(bim, delims), `[`, "", 2L)
                 } else {
-                    colnames <- sapply(strsplit(bim, delims), function(line) {
-                        # Concatenate variant name and minor allele (like --recodeA)
+                    colnames <- vapply(strsplit(bim, delims), function(line) {
+                        # Concatenate variant name and A1 allele (like
+                        # '--recode A' in PLINK)
                         paste0(line[2L], "_", line[5L])
-                    })
+                    }, "")
                 }
             }
         }
@@ -125,17 +135,17 @@ setMethod("show", "BEDMatrix", function(object) {
     dims <- dim(object)
     n <- dims[1L]
     p <- dims[2L]
-    cat("BEDMatrix: ", n, " x ", p, " [", object@path, "]\n", sep = "")
+    cat("BEDMatrix: ", n, " x ", p, " [", slot(object, "path"), "]\n", sep = "")
 })
 
 extract_vector <- function(x, i) {
-    .Call(C_BEDMatrix_extract_vector, x@xptr, i)
+    .Call(C_BEDMatrix_extract_vector, slot(x, "xptr"), i)
 }
 
 extract_matrix <- function(x, i, j) {
-    subset <- .Call(C_BEDMatrix_extract_matrix, x@xptr, i, j)
+    subset <- .Call(C_BEDMatrix_extract_matrix, slot(x, "xptr"), i, j)
     # Preserve dimnames
-    names <- x@dnames
+    names <- slot(x, "dnames")
     dimnames(subset) <- list(
         names[[1L]][i],
         names[[2L]][j]
@@ -143,14 +153,18 @@ extract_matrix <- function(x, i, j) {
     return(subset)
 }
 
-`[.BEDMatrix` <- extract(extract_vector = extract_vector, extract_matrix = extract_matrix, allowDoubles = TRUE)
+`[.BEDMatrix` <- extract(
+    extract_vector = extract_vector,
+    extract_matrix = extract_matrix,
+    allowDoubles = TRUE
+)
 
 dim.BEDMatrix <- function(x) {
-    x@dims
+    slot(x, "dims")
 }
 
 dimnames.BEDMatrix <- function(x) {
-    x@dnames
+    slot(x, "dnames")
 }
 
 `dimnames<-.BEDMatrix` <- function(x, value) {
@@ -158,9 +172,9 @@ dimnames.BEDMatrix <- function(x) {
     v1 <- value[[1L]]
     v2 <- value[[2L]]
     if (!is.list(value) || length(value) != 2L || !(is.null(v1) || length(v1) == d[1L]) || !(is.null(v2) || length(v2) == d[2L])) {
-        stop("invalid dimnames")
+        stop("invalid dimnames", call. = FALSE)
     }
-    x@dnames <- lapply(value, function(v) {
+    slot(x, "dnames") <- lapply(value, function(v) {
         if (!is.null(v)) {
             as.character(v)
         }
