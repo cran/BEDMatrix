@@ -1,10 +1,10 @@
-ae2d01e1e4390d782214f4309b39f51d *DESCRIPTION
+b15ba19ec99df889972cbcb5958c22ba *DESCRIPTION
 c86a14c165f898641bf1b9c92925c731 *LICENSE
 385f8b499da1c87ae5d12cf351ea6248 *NAMESPACE
-4ed9cd0bb1765dd09de4d2080a29f372 *NEWS.md
+5ee15d19e99fd33b63472c839d616cd2 *NEWS.md
 f2d7dcb506247ab65cb4d54bbdb8e1ea *R/BEDMatrix.R
-b84275b75ee5209d51c02243caf90363 *README.md
-d78f056fdd3e3c8293344c3fbe6fa79e *inst/CITATION
+583545bfb5273e694618ec2a76c68214 *README.md
+41fd588161179e16ef9f60305993963a *inst/CITATION
 9ebcdc808ee9c09b4ae8fc061064c15d *inst/THANKS
 9eaac931198472adb46846ec6302f328 *inst/extdata/example.bed
 68afd6fc8cc4a324e9c63ab3e9b4d4e7 *inst/extdata/example.bim
@@ -19,7 +19,7 @@ ad7e2dc2c03f9615efbacb090c726497 *inst/tinytest/test-length.R
 27e740afa7d0c0358d7ea45bef9ae1a1 *man/BEDMatrix-class.Rd
 801ea092726fb12753ddfd674646bd2c *man/BEDMatrix-package.Rd
 bdcd8a5da98ab442f933985272cb718b *man/BEDMatrix.Rd
-79a8d435c0075b1696128ba42dbe8452 *src/BEDMatrix.c
+effc360010369560e9d50f9f8ecf47d4 *src/BEDMatrix.c
 a925d6728ebebd8f4707e4a068121bae *src/BEDMatrix.h
 8cfc146579552df48f28f7e0e682d74f *src/bed.c
 1b1fe0f7554dd7772857f7d02c2d3dff *src/bed.h

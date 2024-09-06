@@ -1,11 +1,9 @@
 BEDMatrix
 =========
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/BEDMatrix)](https://CRAN.R-project.org/package=BEDMatrix)
-[![Rdoc](http://www.rdocumentation.org/badges/version/BEDMatrix)](http://www.rdocumentation.org/packages/BEDMatrix)
-[![Travis-CI Build Status](https://travis-ci.org/QuantGen/BEDMatrix.svg?branch=master)](https://travis-ci.org/QuantGen/BEDMatrix)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/8l5elcr595qwajuf?svg=true)](https://ci.appveyor.com/project/agrueneberg/bedmatrix)
-[![Coverage status](https://codecov.io/gh/QuantGen/BEDMatrix/branch/master/graph/badge.svg)](https://codecov.io/github/QuantGen/BEDMatrix?branch=master)
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/BEDMatrix)](https://CRAN.R-project.org/package=BEDMatrix)
+<!-- badges: end -->
 
 BEDMatrix is an R package that provides a matrix-like wrapper around [.bed](https://www.cog-genomics.org/plink2/formats#bed), one of the genotype/phenotype file formats of [PLINK](https://www.cog-genomics.org/plink2), the whole genome association analysis toolset. BEDMatrix objects are created in R by simply providing the path to a .bed file and once created, they behave similarly to regular matrices with the advantage that genotypes are retrieved on demand without loading the entire file into memory. This allows handling of very large files with limited use of memory.
 
@@ -69,7 +67,7 @@ remotes::install_github("QuantGen/BEDMatrix")
 Documentation
 -------------
 
-Further documentation can be found on [RDocumentation](http://www.rdocumentation.org/packages/BEDMatrix).
+Further documentation can be found on [RDocumentation](https://www.rdocumentation.org/packages/BEDMatrix).
 
 
 Contributing
